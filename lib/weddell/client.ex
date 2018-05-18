@@ -90,6 +90,14 @@ defmodule Weddell.Client do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
+  def start_without_name do
+    GenServer.start(__MODULE__, :ok)
+  end
+
+  def start_link_without_name do
+    GenServer.start_link(__MODULE__, :ok)
+  end
+
   def init(:ok) do
     connect(Application.get_env(:weddell, :project),
             Application.get_all_env(:weddell))
@@ -139,6 +147,18 @@ defmodule Weddell.Client do
     |> Enum.concat(extra_opts)
   end
 
+  def handle_cast(request, client) do
+    case request do
+      {:publish, messages, topic} ->
+        Publisher.publish(client, messages, topic)
+
+      {:client} ->
+        nil
+    end
+
+    {:noreply, client}
+  end
+
   @doc false
   def handle_call(request, _, client) do
     case request do
@@ -185,8 +205,8 @@ defmodule Weddell.Client do
     end
   rescue
     # FIXME: This is an ugly way to handle bad gcp credentials
-    _ in MatchError ->
-      Logger.warn("Bad GCP Credentials, could not retrieve token")
+    err in MatchError ->
+      Logger.warn("Bad GCP Credentials, could not retrieve token #{inspect(err)}")
       %{}
   end
 
