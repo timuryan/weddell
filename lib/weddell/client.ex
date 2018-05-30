@@ -88,6 +88,10 @@ defmodule Weddell.Client do
       _(default: [:cacerts: :certifi.cacerts()])_
   """
   def start_link do
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
+  end
+
+  def start_link_without_name do
     GenServer.start_link(__MODULE__, :ok)
   end
 
