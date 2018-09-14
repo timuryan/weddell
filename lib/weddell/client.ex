@@ -91,6 +91,10 @@ defmodule Weddell.Client do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
+  def start_without_name do
+    GenServer.start(__MODULE__, :ok)
+  end
+
   def start_link_without_name do
     GenServer.start_link(__MODULE__, :ok)
   end
