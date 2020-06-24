@@ -86,8 +86,12 @@ defmodule Weddell.Client.Publisher do
         _message ->
           PubsubMessage.new()
       end)
-    request = PublishRequest.new(topic: Util.full_topic(client.project, topic),
-                                 messages: messages)
+
+      full_topic = case topic do
+        "projects/" <> _ -> topic
+        partial_topic -> Util.full_topic(client.project, partial_topic)
+      end
+    request = PublishRequest.new(topic: full_topic, messages: messages)
     client.channel
     |> stub_module().publish(request, Client.request_opts())
     |> case do
