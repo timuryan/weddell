@@ -13,6 +13,8 @@ defmodule Weddell do
   @typedoc "An RPC error"
   @type error :: {:error, RPCError.t}
 
+  @pull_timeout_ms 15_000
+
   @doc """
   Start Weddell and connect to the Pub/Sub server.
   """
@@ -40,7 +42,7 @@ defmodule Weddell do
   """
   @spec create_topic(topic_name :: String.t) :: :ok | error
   def create_topic(name) do
-    GenServer.call(Weddell.Client, {:create_topic, name})
+    GenServer.call(Weddell.Client, {:create_topic, name}, @pull_timeout_ms)
   end
 
   @doc """
