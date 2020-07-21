@@ -42,7 +42,7 @@ defmodule Weddell do
   """
   @spec create_topic(topic_name :: String.t) :: :ok | error
   def create_topic(name) do
-    GenServer.call(Weddell.Client, {:create_topic, name}, @pull_timeout_ms)
+    GenServer.call(Weddell.Client, {:create_topic, name})
   end
 
   @doc """
@@ -239,7 +239,7 @@ defmodule Weddell do
   @spec pull(subscription_name :: String.t, Client.pull_options) ::
     {:ok, messages :: [Message.t]} | error
   def pull(subscription, opts \\ []) do
-    GenServer.call(Weddell.Client, {:pull, subscription, opts})
+    GenServer.call(Weddell.Client, {:pull, subscription, opts}, @pull_timeout_ms)
   end
 
   @doc """
