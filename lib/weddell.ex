@@ -13,7 +13,7 @@ defmodule Weddell do
   @typedoc "An RPC error"
   @type error :: {:error, RPCError.t}
 
-  @pull_timeout_ms 15_000
+  @genserver_timeout_ms 15_000
 
   @doc """
   Start Weddell and connect to the Pub/Sub server.
@@ -239,7 +239,7 @@ defmodule Weddell do
   @spec pull(subscription_name :: String.t, Client.pull_options) ::
     {:ok, messages :: [Message.t]} | error
   def pull(subscription, opts \\ []) do
-    GenServer.call(Weddell.Client, {:pull, subscription, opts}, @pull_timeout_ms)
+    GenServer.call(Weddell.Client, {:pull, subscription, opts}, @genserver_timeout_ms)
   end
 
   @doc """
@@ -254,6 +254,6 @@ defmodule Weddell do
   @spec acknowledge(messages :: [Message.t] | message :: Message.t,
                     subscription_name :: String.t) :: :ok | error
   def acknowledge(messages, subscription) do
-    GenServer.call(Weddell.Client, {:acknowledge, messages, subscription})
+    GenServer.call(Weddell.Client, {:acknowledge, messages, subscription}, @genserver_timeout_ms)
   end
 end
