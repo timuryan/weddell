@@ -84,8 +84,8 @@ defmodule Weddell.Client.Subscriber do
     {:ok, [Message.t]} | Client.error
   def pull(client, subscription, opts \\ []) do
     full_subscription = case subscription do
-      "projects/" <> _ -> full_subscription
-      _ -> Util.full_subscription(client.project, subscription) 
+      "projects/" <> _ -> subscription
+      _ -> Util.full_subscription(client.project, subscription)
     end
 
     request =
