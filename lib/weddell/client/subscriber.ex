@@ -83,9 +83,14 @@ defmodule Weddell.Client.Subscriber do
   @spec pull(Client.t, subscription_name :: String.t, Client.pull_options) ::
     {:ok, [Message.t]} | Client.error
   def pull(client, subscription, opts \\ []) do
+    full_subscription = case subscription do
+      "projects/" <> _ -> full_subscription
+      _ -> Util.full_subscription(client.project, subscription) 
+    end
+
     request =
       PullRequest.new(
-        subscription: Util.full_subscription(client.project, subscription),
+        subscription: ,
         return_immediately: Keyword.get(opts, :return_immediately, true),
         max_messages: Keyword.get(opts, :max_messages, 1))
     client.channel
