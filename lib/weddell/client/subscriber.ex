@@ -90,7 +90,7 @@ defmodule Weddell.Client.Subscriber do
 
     request =
       PullRequest.new(
-        subscription: ,
+        subscription: full_subscription,
         return_immediately: Keyword.get(opts, :return_immediately, true),
         max_messages: Keyword.get(opts, :max_messages, 1))
     client.channel
